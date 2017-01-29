@@ -3,8 +3,8 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
 require 'home_assistant/generator'
 
-file_path = ARGV.shit
+file_path = ARGV.shift
 raise ArgumentError, 'Must pass at least one argument' unless file_path
 
-generator = HomeAssistant::Generator.new(file_path)
+generator = HomeAssistant::Generator::Generator.new(file_path)
 print generator.config!
