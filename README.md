@@ -1,5 +1,8 @@
 # HomeAssistant::Generator
 
+[![Build Status](https://travis-ci.org/kamaradclimber/home_assistant-generator.svg?branch=master)](https://travis-ci.org/kamaradclimber/home_assistant-generator)
+[![Gem Version](https://badge.fury.io/rb/home_assistant-generator.svg)](https://badge.fury.io/rb/home_assistant-generator)
+
 This gem is used to easily generate home-assistant configuration.
 By default, home-assistant configuration is written in yaml format.
 
