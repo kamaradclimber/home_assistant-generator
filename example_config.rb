@@ -6,10 +6,10 @@ end
 
 
 automation 'Activate movie playing scene' do
-  trigger.when('KoKodi').from(:paused).to(:playing)
+  #trigger.when('KoKodi').from(:paused).to(:playing)
 
   # Other examples
-  # trigger.when('KoKodi').playing
+   trigger.when('KoKodi').playing
   # equivalent to:
   # trigger.when('KoKodi').to(:playing)
 

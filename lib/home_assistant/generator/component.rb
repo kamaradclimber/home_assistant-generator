@@ -1,13 +1,13 @@
-require 'mash'
+require_relative 'properties'
 
 module HomeAssistant
   module Generator
     # generic home-assistant component
     class Component
-      attr_reader :properties
+      prepend Properties
+
       attr_accessor :component_class
       def initialize(name)
-        @properties = Mash.new
         send(name_property, name)
       end
 
@@ -15,14 +15,10 @@ module HomeAssistant
         :name
       end
 
-      def to_h
-        properties.to_hash
-      end
-
       def method_missing(name, *args)
         super unless args.one?
 
-        properties[name.to_sym] = case args.first
+        properties[name.to_s] = case args.first
                                   when Symbol
                                     args.first.to_s
                                   else

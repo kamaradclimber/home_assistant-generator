@@ -1,4 +1,3 @@
-require 'mash'
 require 'yaml'
 
 require_relative 'component'
@@ -36,17 +35,18 @@ module HomeAssistant
       end
 
       def automation(name, &block)
-        Automation.new(name, &block).tap { automations << automation }
+        Automation.new(name, &block).tap { |auto| automations << auto }
       end
 
       def to_s
-        config = component_list.inject(Mash.new) do |mem, component|
-          mem[component.component_class] ||= []
-          mem[component.component_class] << component.to_h
+        config = component_list.inject({}) do |mem, component|
+          mem[component.component_class.to_s] ||= []
+          mem[component.component_class.to_s] << component.to_h
           mem
         end
 
-        config.to_hash.to_yaml
+        config = config.merge('automation' => automations.map(&:to_h))
+        config.to_h.to_yaml
       end
 
       private
