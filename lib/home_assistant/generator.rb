@@ -1,7 +1,15 @@
-require "home_assistant/generator/version"
+require 'home_assistant/generator/version'
 
 module HomeAssistant
   module Generator
-    # Your code goes here...
+    # The basic generator for hass config
+    class Generator
+      def initialize(file_path)
+        @file_path = file_path
+      end
+
+      def config!
+      end
+    end
   end
 end
