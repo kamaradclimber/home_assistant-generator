@@ -14,8 +14,9 @@ module HomeAssistant
         @automations = []
       end
 
-      def eval(file_path)
-        instance_eval(File.read(file_path), file_path)
+      def eval(file_path = nil, &block)
+        instance_eval(File.read(file_path), file_path) if file_path
+        instance_eval(&block) if block_given?
       end
 
       def method_missing(name, *args, &block)
