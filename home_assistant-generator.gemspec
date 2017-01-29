@@ -6,7 +6,7 @@ require 'home_assistant/generator/version'
 Gem::Specification.new do |spec|
   spec.name          = "home_assistant-generator"
   spec.version       = HomeAssistant::Generator::VERSION
-  s.version          = "#{s.version}-alpha-#{ENV['TRAVIS_BUILD_NUMBER']}" if ENV['TRAVIS']
+  spec.version       = "#{spec.version}-alpha-#{ENV['TRAVIS_BUILD_NUMBER']}" if ENV['TRAVIS']
   spec.authors       = ["Grégoire Seux"]
   spec.email         = ["grego_homeassistant@familleseux.net"]
 
