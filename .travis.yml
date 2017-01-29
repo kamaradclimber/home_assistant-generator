@@ -1,4 +1,11 @@
 language: ruby
 rvm:
-  - 2.3.3
+- 2.3.3
 before_install: gem install bundler -v 1.11.2
+deploy:
+  provider: rubygems
+  api_key:
+    secure: f1TL6PhP/0+RMgtSchxetT6IeqzP9tmN3rnjyly5m9WOxxfxqVcfUEiraNfiOg+FbYVVyvjcMjGHZ/HlYvORcXLKZpaX08cYv1i7+uiPtPDa6om1u4rPky1JY9BTOa6dCa4FsECgbPiMZexNEWFYQQKGmLskuWTMywDgQUOhzYVddaCD69g2tn2ZGXxWBi5/rnSZDdloEvcczFZlzHojy1Z3bQvgKtor0TCN7Q9Bcb1mN0FmOcY0tWD1rwrAaLwZHvLES8wHrGNmoFUmIRFJkUyJrb8y3wSyp+yGK06FQMcHusLGEBXr+JEsgxLz6nWJexp9LooFS/oatT6XnIkgmvaRqtVxyaUVMK/IoZ/wRiu2Or6LFbvyXsaN0vAgieWsGYss4umilL9NWjQrNy/WuSmVEXaveTZNdGAHETu9/BtjfpegepiLzB/OJheKRx/iDTi6LALNhia3WJhjTAAUQD6CMHLurx4LOsCxpXmF2/T6TPKmZHUfBp3bHGyL6p3q5tbK9BLOv3G3+MjJdtqVaO7iQq6t36WFVre6HjAdTnSHnOkQBn+aeg+bqenmmq7fI/MPR8t1Yh/N9olP3YI9SDYqyWXSDhbHD1/dJIvW3E4siYVUan+8iPbBgPtZbjg/yVrNQ5L1C8lpkFZJmF8gi9Kcg7EuWgx8lZBSkn9gbEk=
+  gem: home_assistant-generator
+  on:
+    repo: kamaradclimber/home_assistant-generator
