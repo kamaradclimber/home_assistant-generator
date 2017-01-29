@@ -2,15 +2,17 @@ require 'mash'
 require 'yaml'
 
 require_relative 'component'
+require_relative 'automation'
 
 module HomeAssistant
   module Generator
     # dsl class to read config file and evaluate it
     class DSL
-      attr_reader :component_list
+      attr_reader :component_list, :automations
 
       def initialize
         @component_list = []
+        @automations = []
       end
 
       def eval(file_path)
@@ -33,16 +35,24 @@ module HomeAssistant
         element
       end
 
-      def debug(message)
-        $stderr.puts message if ENV['DEBUG']
+      def automation(name, &block)
+        Automation.new(name, &block).tap { automations << automation }
       end
 
       def to_s
-        component_list.inject(Mash.new) do |mem, component|
+        config = component_list.inject(Mash.new) do |mem, component|
           mem[component.component_class] ||= []
           mem[component.component_class] << component.to_h
           mem
-        end.to_hash.to_yaml
+        end
+
+        config.to_hash.to_yaml
+      end
+
+      private
+
+      def debug(message)
+        $stderr.puts message if ENV['DEBUG']
       end
     end
   end
