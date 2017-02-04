@@ -1,6 +1,7 @@
 require 'yaml'
 
 require_relative 'component'
+require_relative 'switch'
 require_relative 'automation'
 
 module CamelCase
@@ -61,7 +62,9 @@ module HomeAssistant
                      block_given? || # some component don't have a name
                      platform # some component simply have a platform and no additional conf
 
-        unless DSL.const_defined?(klass_name)
+        if DSL.const_defined?(klass_name)
+          debug("Found #{klass_name} in DSL namespace, will use it")
+        else
           debug("No #{klass_name} class, defining dynamic class")
           DSL.const_set(klass_name, Class.new(Component) {})
         end

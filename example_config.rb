@@ -77,6 +77,21 @@ limitless__light do
           ])
 end
 
+command_line__switch 'capodimonte_led' do
+  command_on 'sudo systemctl start raspberry_led'
+  command_off 'sudo systemctl stop raspberry_led'
+  command_state 'sudo systemctl is-active raspberry_led > /dev/null 2>&1'
+end
+
+command_line__switch 'nzbget_pause' do
+  command_on <<~EOH.split("\n").join(" && ")
+    curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "pausepost"}'
+    curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "pausedownload"}'
+  EOH
+  command_off %(curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "scheduleresume", "params": [1]}')
+  command_state %(curl -s capodimonte/nzbget/jsonrpc -d '{"method": "status"}' |grep -q 'Paused" : true')
+end
+
 automation 'Activate movie playing scene' do
   # trigger.when('KoKodi').from(:paused).to(:playing)
 
