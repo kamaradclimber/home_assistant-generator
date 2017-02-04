@@ -4,11 +4,13 @@ module HomeAssistant
   module Generator
     # generic home-assistant component
     class Component
+
+      EMPTY_CONF_ALLOWED = %i(sun history logbook)
+
       prepend Properties
 
-      attr_accessor :component_class
-      def initialize(name)
-        send(name_property, name)
+      def initialize(name = nil)
+        send(name_property, name) if name
       end
 
       def name_property

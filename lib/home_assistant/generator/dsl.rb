@@ -3,11 +3,28 @@ require 'yaml'
 require_relative 'component'
 require_relative 'automation'
 
+module CamelCase
+  refine String do
+    def snake_case
+      self.gsub(/::/, '/').
+        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+        gsub(/([a-z\d])([A-Z])/,'\1_\2').
+        tr("-", "_").
+        downcase
+    end
+    def camel_case
+      split('_').collect(&:capitalize).join
+    end
+  end
+end
+
 module HomeAssistant
   module Generator
     # dsl class to read config file and evaluate it
     class DSL
       attr_reader :component_list, :automations
+
+      using CamelCase
 
       def initialize
         @component_list = []
@@ -20,16 +37,14 @@ module HomeAssistant
       end
 
       def method_missing(name, *args, &block)
-        super unless args.one?
+        super unless args.one? || Component::EMPTY_CONF_ALLOWED.include?(name) || block_given?
 
-        klass_name = name.to_s.split('_').collect(&:capitalize).join
-        element = if DSL.const_defined?(klass_name) && DSL.const_get(klass_name)
-                    debug("Defining #{klass_name} instance")
-                    DSL.const_get(klass_name).new(*args)
-                  else
-                    debug("No #{klass_name} class, fallback on basic component")
-                    Component.new(*args).tap { |c| c.component_class = name }
-                  end
+        klass_name = name.to_s.camel_case
+        unless DSL.const_defined?(klass_name)
+          debug("No #{klass_name} class, defining dynamic class")
+          DSL.const_set(klass_name, Class.new(Component) {})
+        end
+        element = DSL.const_get(klass_name).new(*args)
         component_list << element
         element.instance_eval(&block) if block_given?
         element
@@ -41,8 +56,10 @@ module HomeAssistant
 
       def to_s
         config = component_list.inject({}) do |mem, component|
-          mem[component.component_class.to_s] ||= []
-          mem[component.component_class.to_s] << component.to_h
+          component.class.name.split('::').last.snake_case.tap do |name|
+            mem[name] ||= []
+            mem[name] << component.to_h
+          end
           mem
         end
 
