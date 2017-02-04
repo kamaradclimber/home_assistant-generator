@@ -51,14 +51,22 @@ module HomeAssistant
       end
 
       def method_missing(name, *args, &block)
-        super unless args.one? || Component::EMPTY_CONF_ALLOWED.include?(name) || block_given?
+        klass_parts = name.to_s.split('__')
+        klass_name = klass_parts.pop.camel_case
 
-        klass_name = name.to_s.camel_case
+        platform = klass_parts.pop
+
+        super unless args.one? || # one arg means it's the name
+                     Component::EMPTY_CONF_ALLOWED.include?(name) || # some components don't have configuration
+                     block_given? || # some component don't have a name
+                     platform # some component simply have a platform and no additional conf
+
         unless DSL.const_defined?(klass_name)
           debug("No #{klass_name} class, defining dynamic class")
           DSL.const_set(klass_name, Class.new(Component) {})
         end
         element = DSL.const_get(klass_name).new(*args)
+        element.send(:platform, platform) if platform
         component_list << element
         element.instance_eval(&block) if block_given?
         element

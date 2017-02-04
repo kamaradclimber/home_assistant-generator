@@ -32,35 +32,33 @@ updater do
   reporting 'no'
 end
 
-sensor do
-  platform :yr
-end
+yr__sensor
+# strictly equivalent to:
+#sensor do
+#  platform :yr
+#end
 
-sensor do
-  platform :speedtest
+
+speedtest__sensor do
   monitored_conditions %w(ping)
   #hour [0, 6, 12, 18]
   #minute 5
 end
 
-sensor do
-  platform :darksky
+darksky__sensor do
   api_key 'FAKE_KEY'
 end
 
-sensor 'Ping Stats' do
-  platform :statistics
+statistics__sensor 'Ping Stats' do
   entity_id 'sensor.speedtest_ping'
 end
 
-sensor do
-  platform :waqi
+waqi__sensor do
   locations %w(paris)
   stations ['place victor basch']
 end
 
-device_tracker do
-  platform :nmap_tracker
+nmap_tracker__device_tracker do
   hosts '192.168.0.0/24'
   home_interval 10
   interval_seconds 120
@@ -73,8 +71,7 @@ zone 'Criteo' do
   icon 'mdi:desktop-tower'
 end
 
-light do
-  platform :limitlessled
+limitless__light do
   bridges([
             { host: '192.168.0.110', groups: [{ number: 1, type: 'rgbw', name: 'Table à manger' }] }
           ])
