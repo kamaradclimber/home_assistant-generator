@@ -36,15 +36,17 @@ module HomeAssistant
 
       def to_h
         plural = self.class.name.downcase.split('::').last.pluralize
-        { 'platform' => @platform, plural => { @element_name => super } }
+        if properties.key?(plural)
+          # support "dumb" syntax
+          { 'platform' => @platform }.merge(super)
+        else
+          { 'platform' => @platform, plural => { @element_name => super } }
+        end
       end
     end
     class DSL
-      class Switch < PluralComponent
-      end
-
-      class Cover < PluralComponent
-      end
+      class Switch < PluralComponent; end
+      class Cover < PluralComponent; end
     end
   end
 end
