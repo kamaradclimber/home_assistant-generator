@@ -4,7 +4,7 @@ module HomeAssistant
   module Generator
     # generic home-assistant component
     class Component
-      EMPTY_CONF_ALLOWED = %i(sun history logbook).freeze
+      EMPTY_CONF_ALLOWED = %i(sun history logbook discovery frontend conversation zeroconf).freeze
 
       prepend Properties
 

@@ -13,10 +13,71 @@ media_player 'KoKodi' do
   port 8080
 end
 
-sun
+sun          # Track sun position
+discovery    # Discover some devices automatically
+frontend     # Enable home-assistant front-end
+conversation # Allow to issue voice commands from the frontend
+zeroconf     # Expose home-assistant over bonjour
 
 recorder do
   purge_days 14
+end
+
+logbook do
+  # sun moves too much, useless in the log
+  exclude(domains: %w(sun))
+end
+
+updater do
+  reporting 'no'
+end
+
+sensor do
+  platform :yr
+end
+
+sensor do
+  platform :speedtest
+  monitored_conditions %w(ping)
+  #hour [0, 6, 12, 18]
+  #minute 5
+end
+
+sensor do
+  platform :darksky
+  api_key 'FAKE_KEY'
+end
+
+sensor 'Ping Stats' do
+  platform :statistics
+  entity_id 'sensor.speedtest_ping'
+end
+
+sensor do
+  platform :waqi
+  locations %w(paris)
+  stations ['place victor basch']
+end
+
+device_tracker do
+  platform :nmap_tracker
+  hosts '192.168.0.0/24'
+  home_interval 10
+  interval_seconds 120
+  track_new_devices 'yes'
+end
+
+zone 'Criteo' do
+  longitude 2.331610
+  latitude 48.878887
+  icon 'mdi:desktop-tower'
+end
+
+light do
+  platform :limitlessled
+  bridges([
+            { host: '192.168.0.110', groups: [{ number: 1, type: 'rgbw', name: 'Table à manger' }] }
+          ])
 end
 
 automation 'Activate movie playing scene' do

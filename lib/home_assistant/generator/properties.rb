@@ -13,15 +13,24 @@ class Hash
   end
 end
 
-class Mash
-  def to_h
-    keys.each_with_object({}) do |key, hash|
-      hash[key] = case self[key]
-                  when Mash
-                    self[key].to_h
-                  else
-                    self[key]
-                  end
+class Object
+  def convert_to_hash
+    has_to_h = ->(x) { x.respond_to?(:to_h) }
+    case self
+    when String, Numeric, TrueClass, FalseClass
+      self
+    when Symbol
+      to_s
+    when Hash
+      keys.each_with_object({}) do |key, hash|
+        hash[key.to_s] = self[key].convert_to_hash
+      end
+    when Array # here we suppose array of scalar
+      map(&:convert_to_hash)
+    when has_to_h
+      to_h
+    else
+      raise "Can't convert #{inspect} to a hash"
     end
   end
 end
@@ -38,23 +47,7 @@ module HomeAssistant
       end
 
       def to_h
-        has_to_h = ->(x) { x.respond_to?(:to_h) }
-        properties.transform_values do |value|
-          case value
-          when String, Numeric, TrueClass, FalseClass
-            value
-          when Symbol
-            value.to_s
-          when Hash
-            Mash.new(value).to_h
-          when has_to_h
-            value.to_h
-          when Array
-            raise NotImplementedError, 'should be implemented for arrays as well!'
-          else
-            raise "Can't convert #{value.inspect} to a hash"
-          end
-        end
+        properties.convert_to_hash
       end
     end
   end
