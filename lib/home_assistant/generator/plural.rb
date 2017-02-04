@@ -1,3 +1,5 @@
+require 'active_support/inflector'
+
 module HomeAssistant
   module Generator
     # using default Component class behavior would lead to write:
@@ -23,18 +25,22 @@ module HomeAssistant
     #   command_on '...'
     #   command_off '...'
     # end
-    class DSL
-      class Switch < Component
-        def name(value)
-          @switch_name = value
-        end
-        def platform(value)
-          @platform = value
-        end
+    class PluralComponent < Component
+      def name(value)
+        @element_name = value
+      end
 
-        def to_h
-          { 'platform' => @platform, 'switches' => { @switch_name => super } }
-        end
+      def platform(value)
+        @platform = value
+      end
+
+      def to_h
+        plural = self.class.name.downcase.split('::').last.pluralize
+        { 'platform' => @platform, plural => { @element_name => super } }
+      end
+    end
+    class DSL
+      class Switch < PluralComponent
       end
     end
   end

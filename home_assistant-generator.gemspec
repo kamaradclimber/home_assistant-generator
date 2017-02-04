@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.0'
 
   spec.add_runtime_dependency 'mash'
+  spec.add_runtime_dependency 'activesupport'
 end

@@ -1,7 +1,7 @@
 require 'yaml'
 
 require_relative 'component'
-require_relative 'switch'
+require_relative 'plural'
 require_relative 'automation'
 
 module CamelCase
