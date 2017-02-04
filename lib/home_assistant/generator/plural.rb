@@ -42,6 +42,9 @@ module HomeAssistant
     class DSL
       class Switch < PluralComponent
       end
+
+      class Cover < PluralComponent
+      end
     end
   end
 end

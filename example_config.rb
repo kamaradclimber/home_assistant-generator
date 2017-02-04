@@ -84,12 +84,20 @@ command_line__switch 'capodimonte_led' do
 end
 
 command_line__switch 'nzbget_pause' do
-  command_on <<~EOH.split("\n").join(" && ")
+  command_on <<~EOH.split("\n").join(' && ')
     curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "pausepost"}'
     curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "pausedownload"}'
   EOH
   command_off %(curl -XPOST capodimonte/nzbget/jsonrpc -d '{"method": "scheduleresume", "params": [1]}')
   command_state %(curl -s capodimonte/nzbget/jsonrpc -d '{"method": "status"}' |grep -q 'Paused" : true')
+end
+
+command_line__cover 'volets_salon' do
+  command_open %(curl -s http://192.168.0.20/up)
+  command_close %(curl -s http://192.168.0.20/down)
+  command_stop %(curl -s http://192.168.0.20/down) # can't do better for now
+  # since "volets" are disconnected very often, output of status pollutes the log TODO
+  # command_status %(curl -s http://192.168.0.20/status)
 end
 
 automation 'Activate movie playing scene' do
