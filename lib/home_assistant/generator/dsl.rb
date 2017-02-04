@@ -19,6 +19,18 @@ module CamelCase
   end
 end
 
+module IfEmpty
+  refine Hash do
+    def if_empty(default)
+      if empty?
+        default
+      else
+        self
+      end
+    end
+  end
+end
+
 module HomeAssistant
   module Generator
     # dsl class to read config file and evaluate it
@@ -26,6 +38,7 @@ module HomeAssistant
       attr_reader :component_list, :automations
 
       using CamelCase
+      using IfEmpty
 
       def initialize
         @component_list = []
@@ -56,10 +69,12 @@ module HomeAssistant
       end
 
       def to_s
-        config = component_list.each_with_object({}) do |component, mem|
-          component.class.name.split('::').last.snake_case.tap do |name|
-            mem[name] ||= []
-            mem[name] << component.to_h
+        config = component_list.group_by { |component| component.class.name.split('::').last.snake_case }
+                      .transform_values do |components|
+          if components.one?
+            components.first.to_h.if_empty(nil)
+          else
+            components.map(&:to_h)
           end
         end
 

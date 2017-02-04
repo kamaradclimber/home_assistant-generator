@@ -46,7 +46,6 @@ module HomeAssistant
           when Symbol
             value.to_s
           when Hash
-            puts value.inspect
             Mash.new(value).to_h
           when has_to_h
             value.to_h
