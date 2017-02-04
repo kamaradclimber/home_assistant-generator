@@ -6,12 +6,13 @@ require_relative 'automation'
 module CamelCase
   refine String do
     def snake_case
-      self.gsub(/::/, '/').
-        gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-        gsub(/([a-z\d])([A-Z])/,'\1_\2').
-        tr("-", "_").
-        downcase
+      gsub(/::/, '/')
+        .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+        .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+        .tr('-', '_')
+        .downcase
     end
+
     def camel_case
       split('_').collect(&:capitalize).join
     end
@@ -55,12 +56,11 @@ module HomeAssistant
       end
 
       def to_s
-        config = component_list.inject({}) do |mem, component|
+        config = component_list.each_with_object({}) do |component, mem|
           component.class.name.split('::').last.snake_case.tap do |name|
             mem[name] ||= []
             mem[name] << component.to_h
           end
-          mem
         end
 
         config = config.merge('automation' => automations.map(&:to_h))

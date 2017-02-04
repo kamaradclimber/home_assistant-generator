@@ -6,7 +6,7 @@ class String
     /^(?<blank> *)/.match(self) do |match|
       indent = match['blank'].size
       r = /^#{' ' * indent}/
-      self.split("\n").map do |line|
+      split("\n").map do |line|
         line.gsub(r, '')
       end.join("\n")
     end

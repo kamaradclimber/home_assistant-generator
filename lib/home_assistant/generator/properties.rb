@@ -5,7 +5,7 @@ class Hash
   if RUBY_VERSION < '2.4'
     def transform_values
       Hash[
-        self.map do |k, v|
+        map do |k, v|
           [k, (yield v)]
         end
       ]
@@ -15,14 +15,13 @@ end
 
 class Mash
   def to_h
-    keys.inject({}) do |hash, key|
+    keys.each_with_object({}) do |key, hash|
       hash[key] = case self[key]
-      when Mash
-        self[key].to_h
-      else
-        self[key]
-      end
-      hash
+                  when Mash
+                    self[key].to_h
+                  else
+                    self[key]
+                  end
     end
   end
 end

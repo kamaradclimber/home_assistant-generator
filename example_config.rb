@@ -4,9 +4,8 @@ homeassistant 'home' do
   elevation 66
   unit_system 'metric'
   time_zone 'Europe/Paris'
-  customize('switch.capodimonte_led': { icon: 'mdi:led-variant-on'})
+  customize('switch.capodimonte_led': { icon: 'mdi:led-variant-on' })
 end
-
 
 media_player 'KoKodi' do
   platform :kodi
@@ -20,12 +19,11 @@ recorder do
   purge_days 14
 end
 
-
 automation 'Activate movie playing scene' do
-  #trigger.when('KoKodi').from(:paused).to(:playing)
+  # trigger.when('KoKodi').from(:paused).to(:playing)
 
   # Other examples
-   trigger.when('KoKodi').playing
+  trigger.when('KoKodi').playing
   # equivalent to:
   # trigger.when('KoKodi').to(:playing)
 
