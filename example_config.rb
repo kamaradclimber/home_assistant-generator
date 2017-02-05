@@ -100,6 +100,19 @@ command_line__cover 'volets_salon' do
   # command_status %(curl -s http://192.168.0.20/status)
 end
 
+input_boolean do # TODO: improve this kind of declaration
+  light_control_by_kokodi(
+    name: 'Kokodi controle lumière du salon',
+    initial: 'on',
+    icon: 'mdi:toggle-switch'
+  )
+end
+
+shell_command do
+  classical_music_on_kodi '/var/lib/hass/play_random_classical_music_kodi.sh'
+  radio_swiss_classic '/var/lib/hass/play_radio_swiss_classic.sh'
+end
+
 automation 'Activate movie playing scene' do
   # trigger.when('KoKodi').from(:paused).to(:playing)
 
