@@ -113,6 +113,31 @@ shell_command do
   radio_swiss_classic '/var/lib/hass/play_radio_swiss_classic.sh'
 end
 
+script 'Restart HA' do
+  restart_homeassistant
+end
+
+#script 'Heal Zwave' do
+#  heal_network(:zwave)
+#  soft_reset(:zwave)
+#end
+#
+#script 'Shower on' do
+#  run(:classical_music_on_kodi)
+#  delay(5.seconds)
+#  turn_on_light('group.sdb_parents').with(brightness: 20)
+#  delay(5.seconds)
+#  turn_on_light('group.sdb_parents').with(brightness: 40)
+#end
+#
+#script 'bedtime' do
+#  turn_on_light('table_a_manger').with(transition: 1, brightness: 10, color_name: 'white')
+#  turn_on_light('table_a_manger').with(transition: 10, brightness: 215, color_name: 'white')
+#  delay(10.seconds) # wait for previous pipeline to complete
+#  delay(60.seconds) # wait go to bed
+#  turn_off_light('table_a_manger').with(transition: 60)
+#end
+
 automation 'Activate movie playing scene' do
   # trigger.when('KoKodi').from(:paused).to(:playing)
 

@@ -2,6 +2,7 @@ require 'yaml'
 
 require_relative 'component'
 require_relative 'plural'
+require_relative 'script'
 require_relative 'automation'
 
 module CamelCase
