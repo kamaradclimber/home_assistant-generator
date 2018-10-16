@@ -1,5 +1,7 @@
 # HomeAssistant::Generator
 
+https://www.home-assistant.io/ for more details
+
 [![Build Status](https://travis-ci.org/kamaradclimber/home_assistant-generator.svg?branch=master)](https://travis-ci.org/kamaradclimber/home_assistant-generator)
 [![Gem Version](https://badge.fury.io/rb/home_assistant-generator.svg)](https://badge.fury.io/rb/home_assistant-generator)
 
